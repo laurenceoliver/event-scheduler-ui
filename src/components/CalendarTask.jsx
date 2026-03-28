@@ -10,6 +10,10 @@ import {Global} from "@emotion/react";
 const globalStyles = (
     <Global
         styles={{
+            '.fc a': {
+                color: 'inherit',
+                textDecoration: 'none',
+            },
             '.fc-event': {
                 cursor: 'pointer',
             },
