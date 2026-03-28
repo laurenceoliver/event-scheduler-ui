@@ -29,7 +29,7 @@ const ProjectSelector = () => {
     }, []);
 
     return (
-        <FormControl sx={{ width: 300 }}>
+        <FormControl sx={{ width: { xs: '100%', sm: 300 } }}>
             <Select
                 id="project-select"
                 value={selectedProject}

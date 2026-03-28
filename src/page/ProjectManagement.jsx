@@ -1,47 +1,39 @@
 import ProjectSelector from "../components/ProjectSelector";
 import CreateTask from "../components/CreateTask";
-import {Grid, Typography} from "@mui/material";
+import {Typography} from "@mui/material";
 import CalendarTask from "../components/CalendarTask";
 import TaskFilter from "../components/TaskFilter";
 import TaskCard from "../components/TaskCard";
 
 const ProjectManagement = () => {
     return (
-        <>
-            <Grid
-                container
-                alignItems="center"
-                spacing={2}
-                sx={{ mb: 5 }}
-                justifyContent="space-between"
-            >
-                <Grid item xs={12} sm={6}>
+        <div className="container-fluid px-2 px-md-3">
+            <div className="row align-items-center mb-4">
+                <div className="col-12 col-sm-6 mb-2 mb-sm-0">
                     <Typography variant="h4">Project Management Tool</Typography>
-                </Grid>
-                <Grid item xs={12} sm={6} container alignItems="center" spacing={1}>
-                    <Grid item>
+                </div>
+                <div className="col-12 col-sm-6">
+                    <div className="d-flex align-items-center gap-2 justify-content-sm-end">
                         <Typography variant="h6">Project:</Typography>
-                    </Grid>
-                    <Grid item>
                         <ProjectSelector />
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid container spacing={4} justifyContent="space-between">
-                <Grid size={3}>
+                    </div>
+                </div>
+            </div>
+            <div className="row g-4">
+                <div className="col-12 col-lg-3">
                     <CreateTask />
-                </Grid>
-                <Grid size={9}>
+                </div>
+                <div className="col-12 col-lg-9">
                     <TaskFilter />
                     <TaskCard />
-                </Grid>
-            </Grid>
-            <Grid container spacing={4} sx={{ mt: 5 }}>
-                <Grid size={12}>
+                </div>
+            </div>
+            <div className="row mt-4">
+                <div className="col-12">
                     <CalendarTask />
-                </Grid>
-            </Grid>
-        </>
+                </div>
+            </div>
+        </div>
     );
 };
 

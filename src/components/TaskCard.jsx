@@ -1,5 +1,5 @@
 import {useTaskContext} from "../context/TaskContext";
-import {Box, Card, CardActionArea, CardContent, Grid, Typography,} from "@mui/material";
+import {Card, CardActionArea, CardContent, Typography,} from "@mui/material";
 import {useState} from "react";
 import TaskDetailsDialog from "./TaskDetailsDialog";
 
@@ -10,8 +10,8 @@ const statusLabels = {
 };
 
 const TaskList = ({ status, tasks, onTaskClick }) => (
-    <Grid size={4}>
-        <Box display="flex" gap={2} flexDirection="column">
+    <div className="col-12 col-md-4 mb-3 mb-md-0">
+        <div className="d-flex flex-column gap-2">
             <Typography variant="h6">{statusLabels[status]}</Typography>
             {tasks
                 .filter((task) => task.statusId === status)
@@ -24,8 +24,8 @@ const TaskList = ({ status, tasks, onTaskClick }) => (
                         </CardActionArea>
                     </Card>
                 ))}
-        </Box>
-    </Grid>
+        </div>
+    </div>
 );
 
 const TaskCard = () => {
@@ -45,11 +45,11 @@ const TaskCard = () => {
 
     return (selectedProject ?
         <>
-            <Grid container spacing={2} sx={{ mt: 5 }}>
+            <div className="row mt-4">
                 {[1, 2, 3].map((status) => (
                     <TaskList key={status} status={status} tasks={tasks} onTaskClick={showTaskDetails} />
                 ))}
-            </Grid>
+            </div>
 
             <TaskDetailsDialog
                 open={showTaskModal}

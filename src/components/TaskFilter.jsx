@@ -1,4 +1,4 @@
-import {Box, Button, Grid, MenuItem, Select, Typography} from "@mui/material";
+import {Button, MenuItem, Select, Typography} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DateRangePicker} from "@mui/x-date-pickers-pro";
@@ -48,9 +48,9 @@ const TaskFilter = () => {
     }, [selectedProject]);
 
     return (selectedProject ?
-        <Grid container spacing={2} alignItems="center" justifyContent="space-evenly">
-            <Grid item>
-                <Box display="flex" alignItems="center" gap={1}>
+        <div className="row g-2 align-items-center">
+            <div className="col-12 col-md-auto">
+                <div className="d-flex align-items-center gap-2 flex-wrap">
                     <Typography variant="body1">
                         Due Date
                     </Typography>
@@ -58,18 +58,18 @@ const TaskFilter = () => {
                         <DateRangePicker
                             value={dueDateRange}
                             onChange={(newValue) => setDueDateRange(newValue)}
-                            sx={{ width: 300 }}
+                            sx={{ width: { xs: '100%', sm: 300 } }}
                         />
                     </LocalizationProvider>
-                </Box>
-            </Grid>
-            <Grid item>
-                <Box display="flex" alignItems="center" gap={1}>
+                </div>
+            </div>
+            <div className="col-12 col-md-auto">
+                <div className="d-flex align-items-center gap-2">
                     <Typography variant="body1">
                         Sort
                     </Typography>
                     <Select
-                        sx={{ width: 220 }}
+                        sx={{ width: { xs: '100%', sm: 220 } }}
                         id="sort-select"
                         variant="outlined"
                         value={sort}
@@ -78,19 +78,20 @@ const TaskFilter = () => {
                         <MenuItem value="dueDate">Due Date</MenuItem>
                         <MenuItem value="priority">Priority</MenuItem>
                     </Select>
-                </Box>
-            </Grid>
-            <Grid item>
+                </div>
+            </div>
+            <div className="col-12 col-md-auto">
                 <Button
                     disabled={loading}
                     variant="contained"
                     size="large"
                     onClick={() => fetchTasks()}
+                    sx={{ width: { xs: '100%', md: 'auto' } }}
                 >
                     Filter
                 </Button>
-            </Grid>
-        </Grid> : null
+            </div>
+        </div> : null
     )
 };
 
