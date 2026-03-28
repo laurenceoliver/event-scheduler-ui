@@ -1,17 +1,7 @@
 services:
-  backend:
-    build: ../event-scheduler-api
-    container_name: event-scheduler-api
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-
   frontend:
     build:
       context: .
     container_name: event-scheduler-ui
     ports:
       - "3000:3000"
-    depends_on:
-      - backend

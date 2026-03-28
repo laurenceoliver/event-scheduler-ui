@@ -4,30 +4,38 @@ on:
   push:
     branches: [master]
 
+env:
+  REGION: ${{ vars.GCP_REGION }}
+  IMAGE: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/event-scheduler/event-scheduler-ui
+
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
-      - name: Checkout UI repo
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          path: event-scheduler-ui
 
-      - name: Checkout API repo
-        uses: actions/checkout@v4
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          repository: ${{ github.repository_owner }}/event-scheduler-api
-          path: event-scheduler-api
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
 
-      - name: Copy files to GCP VM
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.GCP_VM_IP }}
-          username: ${{ secrets.GCP_VM_USER }}
-          key: ${{ secrets.GCP_VM_SSH_KEY }}
-          source: "event-scheduler-ui,event-scheduler-api"
-          target: ~/app
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ env.IMAGE }}:latest -t ${{ env.IMAGE }}:${{ github.sha }} .
+          docker push ${{ env.IMAGE }}:latest
+          docker push ${{ env.IMAGE }}:${{ github.sha }}
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -36,6 +44,8 @@ jobs:
           username: ${{ secrets.GCP_VM_USER }}
           key: ${{ secrets.GCP_VM_SSH_KEY }}
           script: |
-            cd ~/app/event-scheduler-ui
-            docker compose down
-            docker compose up -d --build
+            gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
+            docker pull ${{ env.IMAGE }}:latest
+            docker stop event-scheduler-ui || true
+            docker rm event-scheduler-ui || true
+            docker run -d --name event-scheduler-ui -p 3000:3000 ${{ env.IMAGE }}:latest
