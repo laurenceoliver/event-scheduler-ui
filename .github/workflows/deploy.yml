@@ -37,15 +37,22 @@ jobs:
           docker push ${{ env.IMAGE }}:latest
           docker push ${{ env.IMAGE }}:${{ github.sha }}
 
+      - name: Get Docker registry token
+        id: docker-token
+        run: echo "token=$(gcloud auth print-access-token)" >> "$GITHUB_OUTPUT"
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.GCP_VM_IP }}
           username: ${{ secrets.GCP_VM_USER }}
           key: ${{ secrets.GCP_VM_SSH_KEY }}
+          envs: DOCKER_TOKEN
           script: |
-            gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
+            echo "$DOCKER_TOKEN" | docker login -u oauth2accesstoken --password-stdin https://${{ vars.GCP_REGION }}-docker.pkg.dev
             docker pull ${{ env.IMAGE }}:latest
             docker stop event-scheduler-ui || true
             docker rm event-scheduler-ui || true
             docker run -d --name event-scheduler-ui -p 3000:3000 ${{ env.IMAGE }}:latest
+        env:
+          DOCKER_TOKEN: ${{ steps.docker-token.outputs.token }}
