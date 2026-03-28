@@ -1,0 +1,41 @@
+name: Deploy to GCP VM
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout UI repo
+        uses: actions/checkout@v4
+        with:
+          path: event-scheduler-ui
+
+      - name: Checkout API repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/event-scheduler-api
+          path: event-scheduler-api
+
+      - name: Copy files to GCP VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.GCP_VM_IP }}
+          username: ${{ secrets.GCP_VM_USER }}
+          key: ${{ secrets.GCP_VM_SSH_KEY }}
+          source: "event-scheduler-ui,event-scheduler-api"
+          target: ~/app
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.GCP_VM_IP }}
+          username: ${{ secrets.GCP_VM_USER }}
+          key: ${{ secrets.GCP_VM_SSH_KEY }}
+          script: |
+            cd ~/app/event-scheduler-ui
+            docker compose down
+            docker compose up -d --build
