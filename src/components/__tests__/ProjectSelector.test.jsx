@@ -51,6 +51,6 @@ describe('ProjectSelector', () => {
     it('calls the API with correct URL', () => {
         axios.get.mockResolvedValue({ data: [] });
         renderWithContext(<ProjectSelector />);
-        expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/api/projects');
+        expect(axios.get).toHaveBeenCalledWith('/api/projects');
     });
 });

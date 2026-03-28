@@ -16,7 +16,7 @@ const ProjectSelector = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get('http://localhost:8080/api/projects')
+        axios.get('/api/projects')
             .then((response) => {
                 setProjects(response.data); // expect array of projects
                 setLoading(false);

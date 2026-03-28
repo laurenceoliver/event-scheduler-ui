@@ -75,7 +75,7 @@ describe('CreateTask', () => {
         );
 
         await waitFor(() => {
-            expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/api/developers');
+            expect(axios.get).toHaveBeenCalledWith('/api/developers');
         });
     });
 

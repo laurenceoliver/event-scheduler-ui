@@ -67,7 +67,7 @@ describe('TaskFilter', () => {
 
         await waitFor(() => {
             expect(axios.get).toHaveBeenCalledWith(
-                'http://localhost:8080/api/tasks/proj-1',
+                '/api/tasks/proj-1',
                 expect.objectContaining({
                     params: expect.objectContaining({
                         sortBy: 'dueDate',

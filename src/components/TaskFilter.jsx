@@ -20,7 +20,7 @@ const TaskFilter = () => {
     const fetchTasks = () => {
         const [start, end] = dueDateRange;
         setLoading(true);
-        axios.get(`http://localhost:8080/api/tasks/${selectedProject}`, {
+        axios.get(`/api/tasks/${selectedProject}`, {
             params: {
                 startDate: start ? start?.format('YYYY-MM-DD') : null,
                 endDate: end ? end?.format('YYYY-MM-DD') : null,

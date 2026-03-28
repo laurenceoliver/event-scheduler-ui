@@ -17,7 +17,7 @@ const CreateTask = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get('http://localhost:8080/api/developers')
+        axios.get('/api/developers')
             .then((response) => {
                 setDevelopers(response.data); // expect array of projects
                 setLoading(false);
@@ -39,7 +39,7 @@ const CreateTask = () => {
         setCreating(true);
 
         try {
-            await axios.post(`http://localhost:8080/api/tasks/${selectedProject}`, {
+            await axios.post(`/api/tasks/${selectedProject}`, {
                 name,
                 priority,
                 dueDate: dueDate.format('YYYY-MM-DD'),
