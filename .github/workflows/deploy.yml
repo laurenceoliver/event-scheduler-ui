@@ -51,6 +51,6 @@ jobs:
             docker pull ${{ env.IMAGE }}:latest
             docker stop event-scheduler-ui 2>/dev/null || true
             docker rm event-scheduler-ui 2>/dev/null || true
-            docker run -d --name event-scheduler-ui -p 3000:3000 ${{ env.IMAGE }}:latest
+            docker run -d --name event-scheduler-ui --network host ${{ env.IMAGE }}:latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
